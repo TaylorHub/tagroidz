@@ -41,7 +41,10 @@ angular.module('tagroidz',['ngCordova'])
 	};
 
 	$scope.updateHost = function(){
-		localStorage.host = $scope.settings.host;		
+		localStorage.host = $scope.settings.host;
+		setTimeout(function(){
+			location.reload();
+		},100);		
 	};
 
 	$scope.onButton = function(name){
@@ -51,7 +54,6 @@ angular.module('tagroidz',['ngCordova'])
 	socket.on('tag',function(){
 		$cordovaVibration.vibrate([150,50,150,30,150,20,150]);
 	});
-
 
 	socket.on('connect',function(){
     	socket.emit('rename',$scope.settings.name);

@@ -111,9 +111,17 @@ body{
     left: 0;
     background: rgba(255,255,255,0.5);
     padding: 8px;
+    overflow: auto;    
 }
+
+.settings .scroll{
+    padding-bottom: 100%;
+}
+
 .settings .close{
-    float:right;
+    position: fixed;
+    top: 6px;
+    right:6px;
 }
 
 .settings input {
