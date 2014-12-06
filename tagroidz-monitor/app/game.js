@@ -15,7 +15,7 @@ var ready = false;
 
 var loadAssets = function(){	
 
-	var assets = 4;
+	var assets = 5;
 	var loaded = 0;
 
 	bgImage.onload = function () {
@@ -52,12 +52,8 @@ var loadAssets = function(){
 
 var players = {};
 
-var socket = io(location.hash.replace('#','')+'/monitor');
-
-socket.on('disconnect', function(){
-	players = {};
-});
-
+var socket = io('http://192.168.1.37:3000/monitor');
+		  
 socket.on('newPlayer', function(msg){
 	players[msg.id] = msg;
 });
@@ -80,7 +76,7 @@ var render = function () {
 
 	for (var id in players){
 
-		if(player[id].dig){
+		if(players[id].dig){
 			ctx.drawImage(vortexImage, players[id].pos.x, players[id].pos.y);
 		}
 
