@@ -43,6 +43,10 @@ angular.module('tagroidz',['ngCordova'])
 		socket.emit('button', name);
 	};
 
+	socket.on('tag',function(){
+		$cordovaVibration.vibrate([150,50,150,30,150,20,150]);
+	});
+
 
 	$timeout(function(){
     	socket.emit('rename',$scope.settings.name);
