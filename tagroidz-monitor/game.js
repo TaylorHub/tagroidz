@@ -9,36 +9,37 @@ document.body.appendChild(canvas);
 var bgImage = new Image();
 var heroImage = new Image();
 var monsterImage = new Image();
+var heroInvicibleImage = new Image();
 var ready = false;
 
 var loadAssets = function(){	
 
-	var assets = 3;
+	var assets = 4;
 	var loaded = 0;
 
-	// Background image
-	var bgReady = false;
 	bgImage.onload = function () {
-		bgReady = true;
 		ready = ++loaded === assets;
 	};
-	bgImage.src = "images/background.png";
 
-	// Hero image
-	var heroReady = false;
+	bgImage.src = "images/background.png";
+	
 	heroImage.onload = function () {
-		heroReady = true;
 		ready = ++loaded === assets;
 	};
 	heroImage.src = "images/hero.png";
 
-	// Monster image
-	var monsterReady = false;
+	heroInvicibleImage.onload = function () {
+		ready = ++loaded === assets;
+	};
+	heroInvicibleImage.src = "images/hero-invicible.png";
+
 	monsterImage.onload = function () {
-		monsterReady = true;
 		ready = ++loaded === assets;
 	};
 	monsterImage.src = "images/monster.png";
+
+
+
 };
 
 
@@ -69,12 +70,18 @@ var render = function () {
 	ctx.drawImage(bgImage, 0, 0);
 
 	for (var id in players){
+
 		if(players[id].isTag){
+			ctx.fillStyle = "Red";
 			ctx.drawImage(monsterImage, players[id].pos.x, players[id].pos.y);	
+		}else if(players[id].isInvicible){
+			ctx.fillStyle = "Orange";
+			ctx.drawImage(heroInvicibleImage, players[id].pos.x, players[id].pos.y);
 		}else{
-			ctx.drawImage(heroImage, players[id].pos.x, players[id].pos.y);
+			ctx.fillStyle = "White";
+			ctx.drawImage(heroImage, players[id].pos.x, players[id].pos.y);		
 		}
-		ctx.fillStyle = "White";
+
 		ctx.fillText(players[id].name,players[id].pos.x, players[id].pos.y+42);
 	}
 

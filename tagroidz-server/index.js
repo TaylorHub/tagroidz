@@ -43,7 +43,7 @@ app.createPlayer = function(id, name) {
 		id: id || 'player',
 		name: name || 'player',
 		isInvicible: true,
-		isTag: true,
+		isTag: false,
 		isScrounch: false,
 		speed:10,
 		pos: {
@@ -53,7 +53,8 @@ app.createPlayer = function(id, name) {
 	};
 	setTimeout(function(){
 		player.isInvicible = false;
- 	}, 3000);
+		io.of('/monitor').emit('state', player);
+ 	}, 5000);
 
 	return player;
 };
@@ -65,14 +66,30 @@ app.createRoom = function(name) {
 		map: app.createMap(),
 		players: [],
 
+		setRandomPos:function(player){
+
+			player.pos.x = this.map.blockSize + parseInt(
+				Math.random()*(this.map.width - this.map.blockSize)
+				,10);
+
+			player.pos.y = this.map.blockSize + parseInt(
+				Math.random()*(this.map.height - this.map.blockSize)
+				,10);
+
+		},
+
 		addPlayer: function(player) {
-			player.pos.x = parseInt(Math.random()*this.map.width,10);
-			player.pos.y = parseInt(Math.random()*this.map.height,10);
+
+			if(!testRoom.players.length){
+				player.isTag = true;
+			}
+
+			this.setRandomPos(player);
 
 			this.players.push(player);
+			io.of('/monitor').emit('newPlayer', player);
 			this.movePlayer(player, player.pos);
 
-			io.of('/monitor').emit('newPlayer', player);
 		},
 
 		removePlayer: function(player){
@@ -84,17 +101,19 @@ app.createRoom = function(name) {
 		movePlayer: function(player, newPos)  {
 			player.pos = newPos;
 
-			console.log(newPos);
+			//console.log(newPos);
 
 			var collider = this.checkCollision(player);
 
 			if(collider && !collider.isInvicible && player.isTag) {
+
 				collider.isTag = true;
 				player.isTag = false;
 				player.isInvicible = true;
 				
 				setTimeout(function(){
 					player.isInvicible = false;
+					io.of('/monitor').emit('state', player);
 				}, 1000);
 
 				io.of('/monitor').emit('state', collider);				
@@ -113,16 +132,30 @@ app.createRoom = function(name) {
 
 				if(!collider && player.id != other.id
 					 && (Math.abs(player.pos.x-other.pos.x)<map.blockSize/2 
-					 	&& Math.abs(player.pos.y-other.pos.y)<this.blockSize/2)){
-
-					console.log('COLLISION')
+					 	&& Math.abs(player.pos.y-other.pos.y)<map.blockSize/2)){
+					console.log('COLLISION');
 					collider = other;
-
 				}
 
 			});
 
 			return collider;
+		},
+
+		onButton:function(name,player){
+
+			console.log('Button '+name+' action');
+			switch(name){
+
+				case  'A' : 
+
+					
+
+				break;
+				case  'B' : break;
+				default : break;
+			}
+
 		},
 
 		moveUp: function(player) {
@@ -191,11 +224,7 @@ controllers.on('connection', function(socket){
 
 	var player = app.createPlayer(uuid.v4(), 'Unnamed player');
 
-	testRoom.addPlayer(player);
-
-	if(testRoom.players.length == 1){
-		player.isTag = true;
-	}
+	testRoom.addPlayer(player);			
 
 	socket.on('disconnect', function(){
 		testRoom.removePlayer(player);
@@ -203,6 +232,10 @@ controllers.on('connection', function(socket){
 
 	socket.on('rename', function(name){
 		testRoom.renamePlayer(player,name);
+	});
+
+	socket.on('button', function(name){
+		testRoom.onButton(name,player);
 	});
 
 	socket.on('state', function(state){

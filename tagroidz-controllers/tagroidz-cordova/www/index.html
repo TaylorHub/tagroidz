@@ -17,8 +17,8 @@
     <span class="arrow arrow-left" ng-class="{active:dir.left}"></span>
     <span class="arrow arrow-right" ng-class="{active:dir.right}"></span>
 
-    <div class="button button-a">A</div>
-    <div class="button button-b">B</div>
+    <div class="button button-a" ng-click="onButton('A')">A</div>
+    <div class="button button-b" ng-click="onButton('B')">B</div>
 
     <div ng-click="settings.shown = true;">Settings</div>
 

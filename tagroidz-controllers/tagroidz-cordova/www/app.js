@@ -39,6 +39,10 @@ angular.module('tagroidz',['ngCordova'])
 		socket.emit('rename',$scope.settings.name);
 	};
 
+	$scope.onButton = function(name){
+		socket.emit('button', name);
+	};
+
 
 	$timeout(function(){
     	socket.emit('rename',$scope.settings.name);
@@ -49,6 +53,7 @@ angular.module('tagroidz',['ngCordova'])
 
     	var options = { frequency: 100 };
 		var Epsilon = 2;
+		var xDelta = 4;
 
 	    $cordovaDeviceMotion.watchAcceleration(options).promise.then(
 
@@ -57,8 +62,9 @@ angular.module('tagroidz',['ngCordova'])
 	      function(acceleration) {
 	      	angular.copy(acceleration,$scope.acceleration);
 
-	      	$scope.dir.top = acceleration.x < -Epsilon;
-	      	$scope.dir.bottom = acceleration.x > Epsilon;
+	      	$scope.dir.top = acceleration.x < -Epsilon + xDelta;
+	      	$scope.dir.bottom = acceleration.x > Epsilon + xDelta;
+
 	      	$scope.dir.left = acceleration.y < -Epsilon;
 	      	$scope.dir.right = acceleration.y > Epsilon;	      	
 
