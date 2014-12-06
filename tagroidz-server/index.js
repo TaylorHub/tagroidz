@@ -24,7 +24,7 @@ app.createMap = function() {
 		blockSize:32,
 		objects: [],
 
-		canMoveTo: function(pos) {
+		canMoveTo: function(pos) {			
 			if(!(pos.x >= this.blockSize && pos.x <= this.width - this.blockSize*2)) {
 				return false;
 			}
@@ -46,7 +46,7 @@ app.createPlayer = function(id, name) {
 		isTag: false,
 		isScrounch: false,
 		dig: false,
-		speed:10,
+		speed:5,
 		pos: {
 			x:0,
 			y:0
@@ -131,20 +131,24 @@ app.createRoom = function(name) {
 			switch(name){
 
 				case  'A' :
-					player.dig = true;
-					io.of('/monitor').emit('state', player);
-					setTimeout(function(){
-						player.dig = false;
-						testRoom.setRandomPos(player);
+					if(!player.dig){					
+						player.dig = true;
 						io.of('/monitor').emit('state', player);
-					},3000)
+						setTimeout(function(){
+							player.dig = false;
+							testRoom.setRandomPos(player);
+							io.of('/monitor').emit('state', player);
+						},1000)
+					}
 					break;
 
 				case  'B' : 
-					player.speed += 5;
-					setTimeout(function(){
-						player.speed -= 5;
-					},3000);
+					if(player.speed == 5){
+						player.speed = 20;
+						setTimeout(function(){
+							player.speed = 5;
+						},500);	
+					}
 					break;
 
 				default : break;
@@ -157,7 +161,7 @@ app.createRoom = function(name) {
 				x: player.pos.x,
 				y: player.pos.y-player.speed
 			};
-			if(this.map.canMoveTo(newPos)){
+			if(!player.dig && this.map.canMoveTo(newPos)){
 				this.movePlayer(player, newPos);
 			};
 		},
@@ -167,7 +171,7 @@ app.createRoom = function(name) {
 				x: player.pos.x,
 				y: player.pos.y+player.speed
 			};
-			if(this.map.canMoveTo(newPos)){
+			if(!player.dig && this.map.canMoveTo(newPos)){
 				this.movePlayer(player, newPos);
 			};
 		},
@@ -177,7 +181,7 @@ app.createRoom = function(name) {
 				x: player.pos.x-player.speed,
 				y: player.pos.y
 			};
-			if(this.map.canMoveTo(newPos)){
+			if(!player.dig && this.map.canMoveTo(newPos)){
 				this.movePlayer(player, newPos);
 			};
 		},
@@ -187,7 +191,7 @@ app.createRoom = function(name) {
 				x: player.pos.x+player.speed,
 				y: player.pos.y
 			};
-			if(this.map.canMoveTo(newPos)){
+			if(!player.dig && this.map.canMoveTo(newPos)){
 				this.movePlayer(player, newPos);
 			};
 		},

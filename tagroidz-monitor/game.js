@@ -15,7 +15,7 @@ var ready = false;
 
 var loadAssets = function(){	
 
-	var assets = 5;
+	var assets = 4;
 	var loaded = 0;
 
 	bgImage.onload = function () {
@@ -76,7 +76,7 @@ var render = function () {
 
 	for (var id in players){
 
-		if(players[id].dig){
+		if(player[id].dig){
 			ctx.drawImage(vortexImage, players[id].pos.x, players[id].pos.y);
 		}
 
