@@ -47,8 +47,21 @@ var loadAssets = function(){
 
 };
 
+var audio = new Audio();
+audio.src='song.mp3';
+audio.play();
+audio.volume=0.4;
+audio.onended = function(){
+	audio.currentTime=0;
+	audio.play();
+};
 
-
+var tagSound = new Audio();
+tagSound.src='9338.mp3';
+function makeTagSound(){
+	tagSound.currentTime=0;
+	tagSound.play();
+}
 
 var players = {};
 
@@ -56,18 +69,14 @@ var socket = io(location.hash.replace('#','')+'/monitor');
 
 socket.on('disconnect', function(){
 	console.log('server disconnect');
-	players = {};
+	players = [];
 });
 
-socket.on('removePlayer', function(msg){
-	console.log('removePlayer : ' + msg.name);
-	console.log(players[msg.id])
-	players[msg.id] = null;
-	delete players[msg.id];
-});
+socket.on('tag', makeTagSound);
 
-socket.on('state', function(msg){
-	players[msg.id] = msg;
+socket.on('players', function(pPlayers){
+	players = pPlayers;
+	render();
 });
 
 // Draw everything
@@ -79,33 +88,26 @@ var render = function () {
 		
 	ctx.drawImage(bgImage, 0, 0);
 
-	for (var id in players){
+	players.forEach(function(player){
 
-		if(players[id].dig){
-			ctx.drawImage(vortexImage, players[id].pos.x, players[id].pos.y);
+		if(player.dig){
+			ctx.drawImage(vortexImage, player.pos.x, player.pos.y);
 		}
 
-		if(players[id].isTag){
+		if(player.isTag){
 			ctx.fillStyle = "Red";
-			ctx.drawImage(monsterImage, players[id].pos.x, players[id].pos.y);	
-		}else if(players[id].isInvicible){
+			ctx.drawImage(monsterImage, player.pos.x, player.pos.y);	
+		}else if(player.isInvicible){
 			ctx.fillStyle = "Orange";
-			ctx.drawImage(heroInvicibleImage, players[id].pos.x, players[id].pos.y);
+			ctx.drawImage(heroInvicibleImage, player.pos.x, player.pos.y);
 		}else{
 			ctx.fillStyle = "White";
-			ctx.drawImage(heroImage, players[id].pos.x, players[id].pos.y);		
+			ctx.drawImage(heroImage, player.pos.x, player.pos.y);		
 		}
 
-		ctx.fillText(players[id].name,players[id].pos.x, players[id].pos.y+42);
-	}
+		ctx.fillText(player.name,player.pos.x, player.pos.y+42);
+	});
 
-};
-
-// The main game loop
-var main = function () {
-	requestAnimationFrame(main);
-	render();
 };
 
 loadAssets();
-main();

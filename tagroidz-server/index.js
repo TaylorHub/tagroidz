@@ -42,9 +42,10 @@ app.createPlayer = function(id, name) {
 	var player = {
 		id: id || 'player',
 		name: name || 'player',
-		isInvicible: true,
+		isInvicible: 200,
 		isTag: false,
 		isScrounch: false,
+		reserve:5,
 		dig: false,
 		speed:5,
 		pos: {
@@ -52,10 +53,6 @@ app.createPlayer = function(id, name) {
 			y:0
 		}
 	};
-	setTimeout(function(){
-		player.isInvicible = false;
-		io.of('/monitor').emit('state', player);
- 	}, 5000);
 
 	return player;
 };
@@ -94,14 +91,11 @@ app.createRoom = function(name) {
 
 		removePlayer: function(player){
 			console.log('remove '+player.name);
-			this.players.splice(this.players.indexOf(player,1));
-			console.log(this.players)
-			io.of('/monitor').emit('removePlayer', player);
+			this.players.splice(this.players.indexOf(player),1);
 		},
 
 		movePlayer: function(player, newPos)  {
 			player.pos = newPos;
-			io.of('/monitor').emit('state', player);
 		},
 
 		checkCollision: function(player){
@@ -132,23 +126,17 @@ app.createRoom = function(name) {
 
 				case  'A' :
 					if(!player.dig){					
-						player.dig = true;
-						io.of('/monitor').emit('state', player);
-						setTimeout(function(){
-							player.dig = false;
-							testRoom.setRandomPos(player);
-							io.of('/monitor').emit('state', player);
-						},1000)
+						player.dig = 50;
 					}
 					break;
 
 				case  'B' : 
-					if(player.speed == 5){
+
+					if(player.reserve > 0){
 						player.speed = 20;
-						setTimeout(function(){
-							player.speed = 5;
-						},500);	
+						player.reserve -= 0.5;
 					}
+
 					break;
 
 				default : break;
@@ -198,7 +186,6 @@ app.createRoom = function(name) {
 
 		renamePlayer:function(player,name){
 			player.name = name;
-			io.of('/monitor').emit('state', player);
 		}
 	};
 
@@ -227,7 +214,13 @@ controllers.on('connection', function(socket){
 	console.log(Object.keys(testRoom.players).length  + ' players');
 
 	socket.on('disconnect', function(){
+
 		testRoom.removePlayer(player);
+
+		if(player.isTag && testRoom.players.length){
+			testRoom.players[0].isTag = true;
+		}
+		
 	});
 
 	socket.on('rename', function(name){
@@ -270,22 +263,10 @@ controllers.on('connection', function(socket){
 
 			other.isTag = true;
 			tagged.isTag = false;
-			tagged.isInvicible = true;
+			tagged.isInvicible = 100;
 
-			var _players = io.of('/controller');			
-			_players.emit('tag');
-			_players.emit('state', other);
-			_players.emit('state', tagged);
-			
-			var _displays = io.of('/monitor');			
-			_displays.emit('tag');
-			_displays.emit('state', other);
-			_displays.emit('state', tagged);
-
-			setTimeout(function(){
-				tagged.isInvicible = false;
-				io.of('/monitor').emit('state', tagged);
-			}, 3000);
+			io.of('/controller').emit('tag');
+			io.of('/monitor').emit('tag');
 					
 		}
 
@@ -296,3 +277,37 @@ controllers.on('connection', function(socket){
 http.listen(3000, function(){
   console.log('listening on *:3000');
 });
+
+var main = function(){
+
+	testRoom.players.forEach(function(player){
+
+		if(player.reserve<5){
+			player.reserve+=0.05;
+		}
+
+		if(player.isInvicible>0){
+			player.isInvicible--;
+		}
+
+		if(player.speed>5){
+			player.speed--;
+		}
+
+		if(player.dig>0){
+			player.dig--;
+			if(!player.dig){
+				testRoom.setRandomPos(player);
+			}
+		}
+
+	});
+
+
+	io.of('/monitor').emit('players',testRoom.players);
+
+	setTimeout(main,25);
+
+};
+
+main();
