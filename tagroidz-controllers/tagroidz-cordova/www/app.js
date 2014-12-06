@@ -17,6 +17,10 @@ angular.module('tagroidz',['ngCordova'])
 		bottom:false
 	};
 
+	$scope.game = {
+		message:''
+	};
+
 	var socket =  io.connect($scope.settings.host + '/controller');
 	  
 	addEventListener('keydown',function(e){
@@ -57,6 +61,7 @@ angular.module('tagroidz',['ngCordova'])
 	});
 
 	socket.on('tag',function(){
+		$scope.game.message = 'PAF !';
 		$cordovaVibration.vibrate([150,50,150,30,150,20,150]);
 	});
 

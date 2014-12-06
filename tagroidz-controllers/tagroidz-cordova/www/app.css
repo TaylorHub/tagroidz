@@ -140,3 +140,15 @@ body{
     font-size: 22px;
     font-family: 'gameFont';
 }
+
+
+.tag-overlay{
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;   
+    padding: 8px;
+    overflow: auto;
+    transition:all linear 2s;
+}
