@@ -4,6 +4,7 @@
   "description": "tagged game",
   "dependencies": {
     "express": "4.10.2",
+    "node-uuid": "^1.4.2",
     "socket.io": "1.2.0"
   }
 }
