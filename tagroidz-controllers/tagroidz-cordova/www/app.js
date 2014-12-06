@@ -51,12 +51,13 @@ angular.module('tagroidz',['ngCordova'])
 		socket.emit('button', name);
 	};
 
-	socket.on('tag',function(){
-		$cordovaVibration.vibrate([150,50,150,30,150,20,150]);
+	socket.on('connect',function(){
+		console.log('connection succes');
+    	socket.emit('rename',$scope.settings.name);
 	});
 
-	socket.on('connect',function(){
-    	socket.emit('rename',$scope.settings.name);
+	socket.on('tag',function(){
+		$cordovaVibration.vibrate([150,50,150,30,150,20,150]);
 	});
 
     document.addEventListener('deviceready', function(){
