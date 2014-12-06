@@ -70,11 +70,11 @@ app.createRoom = function(name) {
 		setRandomPos:function(player){
 
 			player.pos.x = this.map.blockSize + parseInt(
-				Math.random()*(this.map.width - this.map.blockSize)
+				Math.random()*(this.map.width - this.map.blockSize*2)
 				,10);
 
 			player.pos.y = this.map.blockSize + parseInt(
-				Math.random()*(this.map.height - this.map.blockSize)
+				Math.random()*(this.map.height - this.map.blockSize *2)
 				,10);
 
 		},
