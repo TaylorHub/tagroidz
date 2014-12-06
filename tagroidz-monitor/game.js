@@ -53,7 +53,10 @@ var loadAssets = function(){
 var players = {};
 
 var socket = io('http://192.168.1.37:3000/monitor');
-		  
+
+socket.on('disconnect', function(){
+	players = {};
+});
 socket.on('newPlayer', function(msg){
 	players[msg.id] = msg;
 });
