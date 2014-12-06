@@ -22,13 +22,15 @@
     <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
     <script>
       var socket = io('/monitor');
-      $('form').submit(function(){
-        socket.emit('chat message', $('#m').val());
-        $('#m').val('');
-        return false;
+      
+      socket.on('newPlayer', function(msg){
+        console.log(msg);
       });
-      socket.on('chat message', function(msg){
-        $('#messages').append($('<li>').text(msg));
+      socket.on('removePlayer', function(msg){
+        console.log(msg);
+      });
+      socket.on('state', function(msg){
+        console.log(msg);
       });
     </script>
   </body>

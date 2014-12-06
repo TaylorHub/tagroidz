@@ -11,9 +11,6 @@ angular.module('tagroidz',['ngCordova'])
 		bottom:false
 	};
 
-<<<<<<< HEAD
-	var socket =  io.connect('http://192.168.1.22:3000/controller');	  
-=======
 	var socket =  io.connect('http://192.168.1.37:3000/controller');
 	  
 	addEventListener('keydown',function(e){
@@ -21,12 +18,17 @@ angular.module('tagroidz',['ngCordova'])
 		$scope.dir.top = e.keyCode == 38;
 		$scope.dir.right = e.keyCode == 39;
 		$scope.dir.bottom = e.keyCode == 40;
+		socket.emit('state',angular.toJson($scope.dir));
 	});
 
-	$interval(function(){
+	addEventListener('keyup',function(e){
+		$scope.dir.left = !e.keyCode == 37;
+		$scope.dir.top = !e.keyCode == 38;
+		$scope.dir.right = !e.keyCode == 39;
+		$scope.dir.bottom = !e.keyCode == 40;
 		socket.emit('state',angular.toJson($scope.dir));
-	},100)
->>>>>>> 3163872ac2f55e210eead949c443f3bce9ea12d9
+	});
+
 
     document.addEventListener('deviceready', function(){
 
@@ -44,8 +46,9 @@ angular.module('tagroidz',['ngCordova'])
 	      	$scope.dir.bottom = acceleration.x > Epsilon;
 	      	$scope.dir.left = acceleration.y < -Epsilon;
 	      	$scope.dir.right = acceleration.y > Epsilon;
+	      	console.log(acceleration.y);
 
-			socket.emit('dir',$scope.dir);
+			socket.emit('state',angular.toJson($scope.dir));
 
 			if($scope.dir.top 
 				|| $scope.dir.bottom
@@ -53,7 +56,7 @@ angular.module('tagroidz',['ngCordova'])
 				|| $scope.dir.right
 				){
 				// lol 	
-				 //$cordovaVibration.vibrate(95);
+				// $cordovaVibration.vibrate(95);
 			}
 
 	    });
