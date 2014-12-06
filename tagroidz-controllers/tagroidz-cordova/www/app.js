@@ -11,8 +11,7 @@ angular.module('tagroidz',['ngCordova'])
 		bottom:false
 	};
 
-	var socket =  io.connect('http://192.168.1.22:3000/controller');
-	  
+	var socket =  io.connect('http://192.168.1.22:3000/controller');	  
 
     document.addEventListener('deviceready', function(){
 

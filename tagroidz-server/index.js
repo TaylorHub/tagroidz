@@ -38,7 +38,7 @@ app.createMap = function() {
 
 app.createPlayer = function(name) {
 	var player = {
-		name: name,
+		name: name || 'player',
 		isInvicile: true,
 		isTag: false,
 		isScrounch: false,
@@ -69,7 +69,7 @@ app.createRoom = function(name) {
 
 		movePlayer: function(player, newPos)  {
 			player.pos = newPos;
-			io.emit('chat message', JSON.stringify(this));
+			io.emit('chat message', this);
 			console.log(JSON.stringify(this));
 		},
 
@@ -120,13 +120,13 @@ app.createRoom = function(name) {
 var testRoom = app.createRoom('Chez Mooorg');
 app.rooms.push(testRoom);
 
-var yann = app.createPlayer('Yann');
-var taylor = app.createPlayer('Taylor');
-var morgan = app.createPlayer('Morgan');
+// var yann = app.createPlayer('Yann');
+// var taylor = app.createPlayer('Taylor');
+// var morgan = app.createPlayer('Morgan');
 
-testRoom.addPlayer(yann);
-testRoom.addPlayer(taylor);
-testRoom.addPlayer(morgan);
+// testRoom.addPlayer(yann);
+// testRoom.addPlayer(taylor);
+// testRoom.addPlayer(morgan);
 
 
 /*io.on('connection', function(socket){
@@ -139,14 +139,29 @@ testRoom.addPlayer(morgan);
   });
 });*/
 
+function animate(){
+
+};
+
+
 var monitors = io.of('/monitor');
 monitors.on('connection', function(socket){
   console.log('monitor connected');
 });
 
 var controllers = io.of('/controller');
+
 controllers.on('connection', function(socket){
+
+  monitors.clients.emit('newPlayer',socket);
+
   console.log('controller connected');
+  socket.on('message', function(msg){
+  	console.log(msg);
+  })
+  socket.on('state', function(state){
+  	console.log(state);
+  })
 });
 
 
