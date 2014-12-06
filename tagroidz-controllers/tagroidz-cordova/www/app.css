@@ -1,0 +1,141 @@
+
+@font-face {
+    font-family: gameFont;
+    src: url(fonts/game-font.ttf);
+}
+
+body{
+    font-family: 'gameFont';
+    background: #0B5157;
+    overflow: hidden;
+}
+
+.arrow{
+    opacity: 0.2;            
+}
+
+.arrow.active{
+    opacity: 1;
+}
+
+.arrow-top {
+    position: absolute;
+    top: 6px;
+    left:50%;
+    margin-left:-60px;
+    width:0px; 
+    height:0px; 
+    border-left:60px solid transparent;
+    border-right:60px solid transparent;            
+    border-bottom:60px solid #FFBB33;
+}
+
+.arrow-bottom {
+    position: absolute;
+    width:0px; 
+    height:0px; 
+    border-left:60px solid transparent;
+    border-right:60px solid transparent;            
+    border-top:60px solid #FFBB33;
+    bottom: 6px;
+    left:50%;
+    margin-left:-60px;
+}
+
+.arrow-right {
+    position: absolute;
+    top:50%;
+    margin-top: -60px;
+    right:6px;
+    width:0px; 
+    height:0px; 
+    border-top:60px solid transparent;
+    border-bottom:60px solid transparent;            
+    border-left:60px solid #FFBB33;
+}
+
+.arrow-left {
+    position: absolute;
+    top:50%;
+    margin-top: -60px;
+    left:6px;
+    width:0px; 
+    height:0px; 
+    border-top:60px solid transparent;
+    border-bottom:60px solid transparent;            
+    border-right:60px solid #FFBB33; 
+}
+
+.button{
+    border: 2px solid #33B5E5;
+    background: #33B5E5;
+    font-size: 32vh;
+    line-height: 40vh;
+    border-radius: 100%;
+    width: 40vh;
+    height: 40vh;
+    color: white;
+    text-align: center;
+    display: inline-block;;
+    text-align:center;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    position: absolute;
+    top: 50%;
+    margin-top: -20vh;
+}
+
+.button-a{           
+    left: 30vh;
+}
+
+.button-b{
+    right: 30vh;
+}
+
+.button:active{
+    background: #0B5157;
+    border: 2px solid #fff;
+
+}
+
+.settings{
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    background: rgba(255,255,255,0.5);
+    padding: 8px;
+}
+.settings .close{
+    float:right;
+}
+
+.settings input {
+    border: 5px solid white; 
+    -webkit-box-shadow: 
+      inset 0 0 8px  rgba(0,0,0,0.1),
+            0 0 16px rgba(0,0,0,0.1); 
+    -moz-box-shadow: 
+      inset 0 0 8px  rgba(0,0,0,0.1),
+            0 0 16px rgba(0,0,0,0.1); 
+    box-shadow: 
+      inset 0 0 8px  rgba(0,0,0,0.1),
+            0 0 16px rgba(0,0,0,0.1); 
+    padding: 15px;
+    background: rgba(255,255,255,0.5);
+    margin: 0 0 10px 0;
+
+    position: absolute;
+    top: 6vw;
+    left: 25vw;
+    width: 50vw;
+    height: 18vh;
+    font-size: 22px;
+    font-family: 'gameFont';
+}

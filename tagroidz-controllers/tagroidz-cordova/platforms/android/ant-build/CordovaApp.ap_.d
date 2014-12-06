@@ -23,9 +23,11 @@
 /home/morgan/Dev/tagroidz/tagroidz-controllers/tagroidz-cordova/platforms/android/assets/_where-is-www.txt \
 /home/morgan/Dev/tagroidz/tagroidz-controllers/tagroidz-cordova/platforms/android/assets/www/bower_components \
 /home/morgan/Dev/tagroidz/tagroidz-controllers/tagroidz-cordova/platforms/android/assets/www/index.html \
+/home/morgan/Dev/tagroidz/tagroidz-controllers/tagroidz-cordova/platforms/android/assets/www/app.css \
 /home/morgan/Dev/tagroidz/tagroidz-controllers/tagroidz-cordova/platforms/android/assets/www/cordova_plugins.js \
 /home/morgan/Dev/tagroidz/tagroidz-controllers/tagroidz-cordova/platforms/android/assets/www/app.js \
 /home/morgan/Dev/tagroidz/tagroidz-controllers/tagroidz-cordova/platforms/android/assets/www/plugins \
+/home/morgan/Dev/tagroidz/tagroidz-controllers/tagroidz-cordova/platforms/android/assets/www/fonts \
 /home/morgan/Dev/tagroidz/tagroidz-controllers/tagroidz-cordova/platforms/android/assets/www/cordova.js \
 /home/morgan/Dev/tagroidz/tagroidz-controllers/tagroidz-cordova/platforms/android/assets/www/bower_components/ngCordova \
 /home/morgan/Dev/tagroidz/tagroidz-controllers/tagroidz-cordova/platforms/android/assets/www/bower_components/angular \
@@ -58,4 +60,5 @@
 /home/morgan/Dev/tagroidz/tagroidz-controllers/tagroidz-cordova/platforms/android/assets/www/plugins/org.apache.cordova.device-motion/www \
 /home/morgan/Dev/tagroidz/tagroidz-controllers/tagroidz-cordova/platforms/android/assets/www/plugins/org.apache.cordova.device-motion/www/Acceleration.js \
 /home/morgan/Dev/tagroidz/tagroidz-controllers/tagroidz-cordova/platforms/android/assets/www/plugins/org.apache.cordova.device-motion/www/accelerometer.js \
+/home/morgan/Dev/tagroidz/tagroidz-controllers/tagroidz-cordova/platforms/android/assets/www/fonts/game-font.ttf \
 /home/morgan/Dev/tagroidz/tagroidz-controllers/tagroidz-cordova/platforms/android/ant-build/AndroidManifest.xml \

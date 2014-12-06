@@ -6,71 +6,29 @@
         <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />        
         <title></title>
         <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
-        <style>
-        body{
-            background: #222;
-            overflow: hidden;
-        }
-        .arrow-top {
-            position: absolute;
-            top: 6px;
-            left:50%;
-            margin-left:-60px;
-            width:0px; 
-            height:0px; 
-            border-left:60px solid transparent;
-            border-right:60px solid transparent;            
-            border-bottom:60px solid #d27a1d;
-        }
-
-        .arrow-bottom {
-            position: absolute;
-            width:0px; 
-            height:0px; 
-            border-left:60px solid transparent;
-            border-right:60px solid transparent;            
-            border-top:60px solid #d27a1d;
-            bottom: 6px;
-            left:50%;
-            margin-left:-60px;
-        }
-
-        .arrow-right {
-            position: absolute;
-            top:50%;
-            margin-top: -60px;
-            right:6px;
-            width:0px; 
-            height:0px; 
-            border-top:60px solid transparent;
-            border-bottom:60px solid transparent;            
-            border-left:60px solid #d27a1d;
-        }
-
-        .arrow-left {
-            position: absolute;
-            top:50%;
-            margin-top: -60px;
-            left:6px;
-            width:0px; 
-            height:0px; 
-            border-top:60px solid transparent;
-            border-bottom:60px solid transparent;            
-            border-right:60px solid #d27a1d; 
-        }
-
-        #arrows-examples div {
-          margin: 0 0 15px 0;
-        }
-        </style>
+        <link href="app.css" rel="stylesheet"/>
     </head>
 
 </head>
 <body ng-controller="Maincontroller">
-    <span class="arrow-top" ng-show="dir.top"></span>
-    <span class="arrow-bottom" ng-show="dir.bottom"></span>
-    <span class="arrow-left" ng-show="dir.left"></span>
-    <span class="arrow-right" ng-show="dir.right"></span>
+
+    <span class="arrow arrow-top" ng-class="{active:dir.top}"></span>
+    <span class="arrow arrow-bottom" ng-class="{active:dir.bottom}"></span>
+    <span class="arrow arrow-left" ng-class="{active:dir.left}"></span>
+    <span class="arrow arrow-right" ng-class="{active:dir.right}"></span>
+
+    <div class="button button-a">A</div>
+    <div class="button button-b">B</div>
+
+    <div ng-click="settings.shown = true;">Settings</div>
+
+    <div ng-show="settings.shown" class="settings" >
+
+        <div ng-click="settings.shown = false;" class="close">Close</div>
+        <input placeholder="Player name" ng-model="settings.name" type="text" ng-change="updatePlayerName()" />    
+
+    <div>
+
     <script type="text/javascript" src="cordova.js"></script>
 	<script src="bower_components/angular/angular.js"></script>
 	<script src="bower_components/ngCordova/dist/ng-cordova.js"></script>

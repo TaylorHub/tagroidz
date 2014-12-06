@@ -21,13 +21,14 @@ app.createMap = function() {
 	var map = {
 		width: 512,
 		height: 480,
+		blockSize:32,
 		objects: [],
 
 		canMoveTo: function(pos) {
-			if(!(pos.x >= 0 && pos.x <= this.width)) {
+			if(!(pos.x >= this.blockSize && pos.x <= this.width - this.blockSize*2)) {
 				return false;
 			}
-			if(!(pos.y >= 0 && pos.y <= this.height)) {
+			if(!(pos.y >= this.blockSize && pos.y <= this.height - this.blockSize*2)) {
 				return false;
 			}
 			return true;
@@ -37,12 +38,14 @@ app.createMap = function() {
 	return map;
 };
 
-app.createPlayer = function(name, socket) {
+app.createPlayer = function(id, name) {
 	var player = {
+		id: id || 'player',
 		name: name || 'player',
 		isInvicible: true,
 		isTag: true,
 		isScrounch: false,
+		speed:10,
 		pos: {
 			x:0,
 			y:0
@@ -61,22 +64,21 @@ app.createRoom = function(name) {
 		name: name,
 		map: app.createMap(),
 		players: [],
-		speed:10,
 
 		addPlayer: function(player) {
 			player.pos.x = parseInt(Math.random()*this.map.width,10);
 			player.pos.y = parseInt(Math.random()*this.map.height,10);
+
 			this.players.push(player);
 			this.movePlayer(player, player.pos);
 
-				io.of('/monitor').emit('newPlayer', player);
-
-
+			io.of('/monitor').emit('newPlayer', player);
 		},
 
 		removePlayer: function(player){
+			console.log('remove '+player.name);
 			this.players.splice(this.players.indexOf(player,1));
-			monitors.emit('removePlayer', player);
+			io.of('/monitor').emit('removePlayer', player);
 		},
 
 		movePlayer: function(player, newPos)  {
@@ -86,19 +88,16 @@ app.createRoom = function(name) {
 
 			var collider = this.checkCollision(player);
 
-			if(collider) {
-				if(!collider.isInvicible && player.isTag) {
-					collider.isTag = true;
-					player.isTag = false;
-					player.isInvicible = true;
-					console.log('PLAYER '+collider.name + ' Tagged')
-					
-					setTimeout(function(){
-						player.isInvicible = false;
-					}, 1000);
+			if(collider && !collider.isInvicible && player.isTag) {
+				collider.isTag = true;
+				player.isTag = false;
+				player.isInvicible = true;
+				
+				setTimeout(function(){
+					player.isInvicible = false;
+				}, 1000);
 
-					io.of('/monitor').emit('state', collider);
-				}
+				io.of('/monitor').emit('state', collider);				
 			}
 
 			io.of('/monitor').emit('state', player);
@@ -108,16 +107,19 @@ app.createRoom = function(name) {
 
 			var collider;
 
+			var map = this.map;
+
 			this.players.forEach(function(other){
 
-				if(!collider && player.name != other.name && 
-					(Math.abs(player.pos.x-other.pos.x)<16 && Math.abs(player.pos.y-other.pos.y)<16)){
+				if(!collider && player.id != other.id
+					 && (Math.abs(player.pos.x-other.pos.x)<map.blockSize/2 
+					 	&& Math.abs(player.pos.y-other.pos.y)<this.blockSize/2)){
 
 					console.log('COLLISION')
 					collider = other;
-					console.log(player.pos)
-					console.log(other.pos)
+
 				}
+
 			});
 
 			return collider;
@@ -126,7 +128,7 @@ app.createRoom = function(name) {
 		moveUp: function(player) {
 			var newPos = {
 				x: player.pos.x,
-				y: player.pos.y-this.speed
+				y: player.pos.y-player.speed
 			};
 			if(this.map.canMoveTo(newPos)){
 				this.movePlayer(player, newPos);
@@ -136,7 +138,7 @@ app.createRoom = function(name) {
 		moveDown: function(player) {
 			var newPos = {
 				x: player.pos.x,
-				y: player.pos.y+this.speed
+				y: player.pos.y+player.speed
 			};
 			if(this.map.canMoveTo(newPos)){
 				this.movePlayer(player, newPos);
@@ -145,7 +147,7 @@ app.createRoom = function(name) {
 
 		moveLeft: function(player) {
 			var newPos = {
-				x: player.pos.x-this.speed,
+				x: player.pos.x-player.speed,
 				y: player.pos.y
 			};
 			if(this.map.canMoveTo(newPos)){
@@ -155,57 +157,39 @@ app.createRoom = function(name) {
 
 		moveRight: function(player) {
 			var newPos = {
-				x: player.pos.x+this.speed,
+				x: player.pos.x+player.speed,
 				y: player.pos.y
 			};
 			if(this.map.canMoveTo(newPos)){
 				this.movePlayer(player, newPos);
 			};
+		},
+
+		renamePlayer:function(player,name){
+			player.name = name;
+			io.of('/monitor').emit('state', player);
 		}
 	};
 
 	return room;
 }
 
-var testRoom = app.createRoom('Chez Mooorg');
+var testRoom = app.createRoom('Room');
 app.rooms.push(testRoom);
-
-// var yann = app.createPlayer('Yann');
-// var taylor = app.createPlayer('Taylor');
-// var morgan = app.createPlayer('Morgan');
-
-// testRoom.addPlayer(yann);
-// testRoom.addPlayer(taylor);
-// testRoom.addPlayer(morgan);
-
-
-/*io.on('connection', function(socket){
-
-  socket.on('chat message', function(msg){
-
-  	console.log('new player named: '+msg)
-  	io.emit('chat message', JSON.stringify(app.rooms[0]));
-    io.emit('chat message', msg);
-  });
-});*/
-
-
-var players = [];
 
 var monitors = io.of('/monitor');
 
 monitors.on('connection', function(socket){
-  console.log('monitor connected');
+  console.log('Display connected');
 });
 
 var controllers = io.of('/controller');
 
 controllers.on('connection', function(socket){
 
-	console.log('controller connected');
+	console.log('Player connected');
 
-	var player = app.createPlayer(uuid.v4(), socket);
-
+	var player = app.createPlayer(uuid.v4(), 'Unnamed player');
 
 	testRoom.addPlayer(player);
 
@@ -213,8 +197,15 @@ controllers.on('connection', function(socket){
 		player.isTag = true;
 	}
 
-	socket.on('state', function(state){
+	socket.on('disconnect', function(){
+		testRoom.removePlayer(player);
+	});
 
+	socket.on('rename', function(name){
+		testRoom.renamePlayer(player,name);
+	});
+
+	socket.on('state', function(state){
 
 		state = JSON.parse(state);
 
@@ -231,19 +222,9 @@ controllers.on('connection', function(socket){
 			testRoom.moveRight(player);
 		}
 
-		//var clients = io.of('/monitor').clients();
-
 	});
-
-	socket.on('disconnect', function(){
-		testRoom.removePlayer(player);
-	});
-   
   
 });
-
-
-
 
 http.listen(3000, function(){
   console.log('listening on *:3000');

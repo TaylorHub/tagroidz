@@ -1,9 +1,14 @@
 angular.module('tagroidz',['ngCordova'])
-.controller('Maincontroller',function($scope, $cordovaDeviceMotion,$cordovaVibration, $interval){
+.controller('Maincontroller',function($scope, $cordovaDeviceMotion,$cordovaVibration, $interval,$timeout){
 
 	$scope.state = 'Hey move your phone';
 	$scope.deviceOrientation = {};
 	$scope.acceleration = {};
+	$scope.settings = {
+		name:localStorage.name || 'Unnamed player',
+		shown:false
+	};
+
 	$scope.dir = {
 		left:false,
 		top:false,
@@ -29,8 +34,18 @@ angular.module('tagroidz',['ngCordova'])
 		socket.emit('state',angular.toJson($scope.dir));
 	});
 
+	$scope.updatePlayerName = function(){
+		localStorage.name = $scope.settings.name;
+		socket.emit('rename',$scope.settings.name);
+	};
+
+
+	$timeout(function(){
+    	socket.emit('rename',$scope.settings.name);
+	},500);
 
     document.addEventListener('deviceready', function(){
+
 
     	var options = { frequency: 100 };
 		var Epsilon = 2;
@@ -45,8 +60,7 @@ angular.module('tagroidz',['ngCordova'])
 	      	$scope.dir.top = acceleration.x < -Epsilon;
 	      	$scope.dir.bottom = acceleration.x > Epsilon;
 	      	$scope.dir.left = acceleration.y < -Epsilon;
-	      	$scope.dir.right = acceleration.y > Epsilon;
-	      	console.log(acceleration.y);
+	      	$scope.dir.right = acceleration.y > Epsilon;	      	
 
 			socket.emit('state',angular.toJson($scope.dir));
 
