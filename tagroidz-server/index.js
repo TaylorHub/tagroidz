@@ -88,7 +88,6 @@ app.createRoom = function(name) {
 			this.setRandomPos(player);
 
 			this.players.push(player);
-			io.of('/monitor').emit('newPlayer', player);
 			this.movePlayer(player, player.pos);
 
 		},
@@ -224,6 +223,8 @@ controllers.on('connection', function(socket){
 
 	testRoom.addPlayer(player);			
 
+	console.log(Object.keys(testRoom.players).length  + ' players');
+
 	socket.on('disconnect', function(){
 		testRoom.removePlayer(player);
 	});
@@ -255,27 +256,34 @@ controllers.on('connection', function(socket){
 
 		var collider = testRoom.checkCollision(player);
 
-		if(collider && !collider.isInvicible && player.isTag) {
+		var tagged, other;
+		if(player.isTag){
+			tagged = player;
+			other = collider
+		} else if(collider && collider.isTag){
+			tagged = collider;
+			other = player;
+		}
 
-			collider.isTag = true;
+		if(tagged && other && !other.isInvicible) {
 
-			player.isTag = false;
-			player.isInvicible = true;
+			other.isTag = true;
+			tagged.isTag = false;
+			tagged.isInvicible = true;
 
 			var _players = io.of('/controller');			
 			_players.emit('tag');
-			_players.emit('state', player);
-			_players.emit('state', collider);
+			_players.emit('state', other);
+			_players.emit('state', tagged);
 			
 			var _displays = io.of('/monitor');			
 			_displays.emit('tag');
-			_displays.emit('state', player);
-			_displays.emit('state', collider);
-
+			_displays.emit('state', other);
+			_displays.emit('state', tagged);
 
 			setTimeout(function(){
-				player.isInvicible = false;
-				io.of('/monitor').emit('state', player);
+				tagged.isInvicible = false;
+				io.of('/monitor').emit('state', tagged);
 			}, 3000);
 					
 		}
