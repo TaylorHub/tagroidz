@@ -6,6 +6,7 @@ angular.module('tagroidz',['ngCordova'])
 	$scope.acceleration = {};
 	$scope.settings = {
 		name:localStorage.name || 'Unnamed player',
+		host:localStorage.host || 'http://localhost:3000',
 		shown:false
 	};
 
@@ -16,7 +17,7 @@ angular.module('tagroidz',['ngCordova'])
 		bottom:false
 	};
 
-	var socket =  io.connect('http://192.168.1.37:3000/controller');
+	var socket =  io.connect($scope.settings.host + '/controller');
 	  
 	addEventListener('keydown',function(e){
 		$scope.dir.left = e.keyCode == 37;
@@ -37,6 +38,10 @@ angular.module('tagroidz',['ngCordova'])
 	$scope.updatePlayerName = function(){
 		localStorage.name = $scope.settings.name;
 		socket.emit('rename',$scope.settings.name);
+	};
+
+	$scope.updateHost = function(){
+		localStorage.host = $scope.settings.host;		
 	};
 
 	$scope.onButton = function(name){
