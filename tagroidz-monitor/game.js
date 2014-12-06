@@ -53,7 +53,11 @@ var loadAssets = function(){
 var players = {};
 
 var socket = io(location.hash.replace('#','')+'/monitor');
-		  
+
+socket.on('disconnect', function(){
+	players = {};
+});
+
 socket.on('newPlayer', function(msg){
 	players[msg.id] = msg;
 });

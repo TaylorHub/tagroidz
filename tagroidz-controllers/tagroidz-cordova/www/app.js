@@ -53,9 +53,9 @@ angular.module('tagroidz',['ngCordova'])
 	});
 
 
-	$timeout(function(){
+	socket.on('connect',function(){
     	socket.emit('rename',$scope.settings.name);
-	},500);
+	});
 
     document.addEventListener('deviceready', function(){
 
