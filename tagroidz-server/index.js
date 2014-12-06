@@ -45,6 +45,7 @@ app.createPlayer = function(id, name) {
 		isInvicible: true,
 		isTag: false,
 		isScrounch: false,
+		dig: false,
 		speed:10,
 		pos: {
 			x:0,
@@ -147,10 +148,15 @@ app.createRoom = function(name) {
 			console.log('Button '+name+' action');
 			switch(name){
 
-				case  'A' : 
+				case  'A' :
 
-					
-
+					player.dig = true;
+					setTimeout(function(){
+						player.dig = false;
+						io.of('/monitor').emit('state', player);
+					},3000)
+					testRoom.setRandomPos(player);
+					io.of('/monitor').emit('state', player);
 				break;
 				case  'B' : break;
 				default : break;
