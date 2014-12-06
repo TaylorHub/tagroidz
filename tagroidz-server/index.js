@@ -8,7 +8,7 @@ app.get('/chattest', function(req, res){
 });
 
 app.get('/monitor', function(req, res){
-  res.sendFile(__dirname + '/monitor/index.html');
+  res.sendFile(__dirname + '/../tagroidz-monitor/index.html');
 });
 
 app.get('/controller', function(req, res){
