@@ -220,7 +220,7 @@ controllers.on('connection', function(socket){
 		if(player.isTag && testRoom.players.length){
 			testRoom.players[0].isTag = true;
 		}
-		
+
 	});
 
 	socket.on('rename', function(name){
