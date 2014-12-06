@@ -52,7 +52,7 @@ var loadAssets = function(){
 
 var players = {};
 
-var socket = io('http://192.168.1.37:3000/monitor');
+var socket = io(location.hash.replace('#','')+'/monitor');
 		  
 socket.on('newPlayer', function(msg){
 	players[msg.id] = msg;
