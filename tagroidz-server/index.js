@@ -45,7 +45,7 @@ app.createPlayer = function(id, name) {
 		isInvicible: 200,
 		isTag: false,
 		isScrounch: false,
-		reserve:5,
+		reserve:0,
 		dig: false,
 		speed:5,
 		pos: {
@@ -133,8 +133,8 @@ app.createRoom = function(name) {
 				case  'B' : 
 
 					if(player.reserve > 0){
-						player.speed = 20;
-						player.reserve -= 0.5;
+						player.speed += player.reserve;
+						player.reserve = Math.max(player.reserve - 2, 0);
 					}
 
 					break;
@@ -283,7 +283,7 @@ var main = function(){
 	testRoom.players.forEach(function(player){
 
 		if(player.reserve<5){
-			player.reserve+=0.05;
+			player.reserve+=0.025;
 		}
 
 		if(player.isInvicible>0){
@@ -291,7 +291,7 @@ var main = function(){
 		}
 
 		if(player.speed>5){
-			player.speed--;
+			player.speed -= 0.1;
 		}
 
 		if(player.dig>0){
