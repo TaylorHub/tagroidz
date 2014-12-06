@@ -106,6 +106,8 @@ var render = function () {
 		}
 
 		ctx.fillText(player.name,player.pos.x, player.pos.y+42);
+
+	    ctx.fillRect(player.pos.x,player.pos.y-12,player.reserve*8, 6);
 	});
 
 };
