@@ -43,14 +43,12 @@ var loadAssets = function(){
 	};
 	monsterImage.src = "images/monster.png";
 
-
-
 };
 
 var audio = new Audio();
 audio.src='song.mp3';
 audio.play();
-audio.volume=0.4;
+audio.volume=0;
 audio.onended = function(){
 	audio.currentTime=0;
 	audio.play();
@@ -75,10 +73,12 @@ socket.on('disconnect', function(){
 socket.on('tag', makeTagSound);
 
 socket.on('players', function(pPlayers){
-	players = pPlayers;
-	render();
+	players = pPlayers;	
 });
 
+var blinking = true;
+
+setInterval(function(){blinking=!blinking;},100);
 // Draw everything
 var render = function () {
 
@@ -95,14 +95,21 @@ var render = function () {
 		}
 
 		if(player.isTag){
+			ctx.drawImage(monsterImage, player.pos.x, player.pos.y);
 			ctx.fillStyle = "Red";
-			ctx.drawImage(monsterImage, player.pos.x, player.pos.y);	
+			ctx.fillText(player.name,player.pos.x, player.pos.y+42);
+
 		}else if(player.isInvicible){
-			ctx.fillStyle = "Orange";
-			ctx.drawImage(heroInvicibleImage, player.pos.x, player.pos.y);
+			if(blinking){				
+				ctx.drawImage(heroInvicibleImage, player.pos.x, player.pos.y);
+				ctx.fillStyle = "Orange";
+				ctx.fillText(player.name,player.pos.x, player.pos.y+42);
+			}
+			
 		}else{
-			ctx.fillStyle = "White";
 			ctx.drawImage(heroImage, player.pos.x, player.pos.y);		
+			ctx.fillStyle = "White";
+			ctx.fillText(player.name,player.pos.x, player.pos.y+42);
 		}
 
 		ctx.fillText(player.name,player.pos.x, player.pos.y+42);
@@ -112,4 +119,10 @@ var render = function () {
 
 };
 
+var main = function(){
+	requestAnimationFrame(main);
+	render();
+}
+
 loadAssets();
+main();
