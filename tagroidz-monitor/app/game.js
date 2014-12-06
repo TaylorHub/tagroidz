@@ -6,6 +6,7 @@ canvas.width = 512;
 canvas.height = 480;
 document.body.appendChild(canvas);
 
+var vortexImage = new Image();
 var bgImage = new Image();
 var heroImage = new Image();
 var monsterImage = new Image();
@@ -14,14 +15,18 @@ var ready = false;
 
 var loadAssets = function(){	
 
-	var assets = 4;
+	var assets = 5;
 	var loaded = 0;
 
 	bgImage.onload = function () {
 		ready = ++loaded === assets;
 	};
-
 	bgImage.src = "images/background.png";
+
+	vortexImage.onload = function () {
+		ready = ++loaded === assets;
+	};
+	vortexImage.src = "images/vortex.png";
 	
 	heroImage.onload = function () {
 		ready = ++loaded === assets;
@@ -70,6 +75,10 @@ var render = function () {
 	ctx.drawImage(bgImage, 0, 0);
 
 	for (var id in players){
+
+		if(player[id].dig){
+			ctx.drawImage(vortexImage, players[id].pos.x, players[id].pos.y);
+		}
 
 		if(players[id].isTag){
 			ctx.fillStyle = "Red";
