@@ -101,25 +101,6 @@ app.createRoom = function(name) {
 
 		movePlayer: function(player, newPos)  {
 			player.pos = newPos;
-
-			//console.log(newPos);
-
-			var collider = this.checkCollision(player);
-
-			if(collider && !collider.isInvicible && player.isTag) {
-
-				collider.isTag = true;
-				player.isTag = false;
-				player.isInvicible = true;
-				
-				setTimeout(function(){
-					player.isInvicible = false;
-					io.of('/monitor').emit('state', player);
-				}, 1000);
-
-				io.of('/monitor').emit('state', collider);				
-			}
-
 			io.of('/monitor').emit('state', player);
 		},
 
@@ -136,6 +117,7 @@ app.createRoom = function(name) {
 					 	&& Math.abs(player.pos.y-other.pos.y)<map.blockSize/2)){
 					console.log('COLLISION');
 					collider = other;
+
 				}
 
 			});
@@ -259,6 +241,33 @@ controllers.on('connection', function(socket){
 		}
 		if(state.right){
 			testRoom.moveRight(player);
+		}
+
+		var collider = testRoom.checkCollision(player);
+
+		if(collider && !collider.isInvicible && player.isTag) {
+
+			collider.isTag = true;
+
+			player.isTag = false;
+			player.isInvicible = true;
+
+			var _players = io.of('/controller');			
+			_players.emit('tag');
+			_players.emit('state', player);
+			_players.emit('state', collider);
+			
+			var _displays = io.of('/monitor');			
+			_displays.emit('tag');
+			_displays.emit('state', player);
+			_displays.emit('state', collider);
+
+
+			setTimeout(function(){
+				player.isInvicible = false;
+				io.of('/monitor').emit('state', player);
+			}, 3000);
+					
 		}
 
 	});
