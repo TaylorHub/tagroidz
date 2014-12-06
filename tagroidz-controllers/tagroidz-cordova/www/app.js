@@ -41,7 +41,10 @@ angular.module('tagroidz',['ngCordova'])
 	};
 
 	$scope.updateHost = function(){
-		localStorage.host = $scope.settings.host;		
+		localStorage.host = $scope.settings.host;
+		setTimeout(function(){
+			location.reload();
+		},100);		
 	};
 
 	$scope.onButton = function(name){

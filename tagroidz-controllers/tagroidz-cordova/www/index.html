@@ -22,11 +22,14 @@
 
     <div ng-click="settings.shown = true;">Settings</div>
 
-    <div ng-show="settings.shown" class="settings" >
+    <div ng-show="settings.shown" class="settings">
 
-        <div ng-click="settings.shown = false;" class="close">Close</div>
-        <input placeholder="Player name" ng-model="settings.name" type="text" ng-change="updatePlayerName()" />    
-        <input placeholder="Host" ng-model="settings.host" type="text" ng-change="updateHost()" />    
+        <div class="scroll">
+            <div ng-click="settings.shown = false;" class="close">Close</div>
+            <input placeholder="Player name" ng-model="settings.name" type="text" ng-change="updatePlayerName()" />    
+            <input placeholder="Host" ng-model="settings.host" type="text"/>   
+            <input type="button" ng-click="updateHost()" value="Update" />   
+        </div>
 
     <div>
 
