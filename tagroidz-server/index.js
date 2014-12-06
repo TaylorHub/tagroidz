@@ -96,6 +96,7 @@ app.createRoom = function(name) {
 		removePlayer: function(player){
 			console.log('remove '+player.name);
 			this.players.splice(this.players.indexOf(player,1));
+			console.log(this.players)
 			io.of('/monitor').emit('removePlayer', player);
 		},
 
