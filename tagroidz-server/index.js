@@ -131,16 +131,22 @@ app.createRoom = function(name) {
 			switch(name){
 
 				case  'A' :
-
 					player.dig = true;
+					io.of('/monitor').emit('state', player);
 					setTimeout(function(){
 						player.dig = false;
+						testRoom.setRandomPos(player);
 						io.of('/monitor').emit('state', player);
 					},3000)
-					testRoom.setRandomPos(player);
-					io.of('/monitor').emit('state', player);
-				break;
-				case  'B' : break;
+					break;
+
+				case  'B' : 
+					player.speed += 5;
+					setTimeout(function(){
+						player.speed -= 5;
+					},3000);
+					break;
+
 				default : break;
 			}
 
