@@ -1,0 +1,19 @@
+{
+  "name": "tagroidz-cordova",
+  "version": "0.0.0",
+  "homepage": "https://github.com/TaylorDocdoku/tagroidz",
+  "authors": [
+    "Morgan <morgan.guimard@gmail.com>"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "ngCordova": "~0.1.7-alpha"
+  }
+}
