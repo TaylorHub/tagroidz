@@ -4,7 +4,8 @@ angular.module('tagroidz',['ngCordova'])
 	
 	$scope.settings = {
 		name:localStorage.name || 'Unnamed player',
-		host:localStorage.host || '',
+		host:localStorage.host,
+		mobile:false,
 		shown:false
 	};
 
@@ -20,22 +21,27 @@ angular.module('tagroidz',['ngCordova'])
 	};
 
 	var socket =  io.connect($scope.settings.host + '/controller');
+	
+	if(!$scope.settings.mobile){
+		
+		addEventListener('keydown',function(e){
+			$scope.dir.left = e.keyCode == 37;
+			$scope.dir.top = e.keyCode == 38;
+			$scope.dir.right = e.keyCode == 39;
+			$scope.dir.bottom = e.keyCode == 40;
+			socket.emit('state',angular.toJson($scope.dir));
+		});
+	
+		addEventListener('keyup',function(e){
+			$scope.dir.left = !e.keyCode == 37;
+			$scope.dir.top = !e.keyCode == 38;
+			$scope.dir.right = !e.keyCode == 39;
+			$scope.dir.bottom = !e.keyCode == 40;
+			socket.emit('state',angular.toJson($scope.dir));
+		});
+		
+	}
 	  
-	addEventListener('keydown',function(e){
-		$scope.dir.left = e.keyCode == 37;
-		$scope.dir.top = e.keyCode == 38;
-		$scope.dir.right = e.keyCode == 39;
-		$scope.dir.bottom = e.keyCode == 40;
-		socket.emit('state',angular.toJson($scope.dir));
-	});
-
-	addEventListener('keyup',function(e){
-		$scope.dir.left = !e.keyCode == 37;
-		$scope.dir.top = !e.keyCode == 38;
-		$scope.dir.right = !e.keyCode == 39;
-		$scope.dir.bottom = !e.keyCode == 40;
-		socket.emit('state',angular.toJson($scope.dir));
-	});
 
 	$scope.updatePlayerName = function(){
 		localStorage.name = $scope.settings.name;
@@ -54,7 +60,15 @@ angular.module('tagroidz',['ngCordova'])
 	};
 
 	socket.on('connect',function(){
-		console.log('connection succes');
+		
+		$scope.$apply(function(){
+			$scope.game.message = 'Connected';
+		});
+		
+		$timeout(function(){
+			$scope.game.message = '';
+		},2000);
+	
     	socket.emit('rename',$scope.settings.name);
 	});
 
@@ -86,4 +100,22 @@ angular.module('tagroidz',['ngCordova'])
 
     }, false);
 
+})
+.directive('popupMessage',function($timeout){
+	return function(scope, element, attrs) {
+		element.addClass('animated');
+
+		attrs.$observe('message', function(val) {
+			if(!val){
+				return
+			}
+			element.removeClass('bounceOutUp');
+			element.html(val).addClass('zoomIn');
+			$timeout(function(){
+				element.removeClass('zoomIn');
+				element.addClass('bounceOutUp');
+			},1000);
+		});
+		
+   };
 });

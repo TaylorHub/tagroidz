@@ -7,6 +7,8 @@
         <title></title>
         <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
         <link href="app.css" rel="stylesheet"/>
+        <link href="bower_components/animate.css/animate.css" rel="stylesheet"/>
+
     </head>
 
 </head>
@@ -22,8 +24,7 @@
 
     <div ng-click="settings.shown = true;" class="open-settings">Settings</div>
 
-    <div ng-show="settings.shown" class="settings">
-
+    <div ng-show="settings.shown" class="settings" ng-class="{opened:settings.shown}">
         <div class="scroll">
             <div ng-click="settings.shown = false;" class="close">Close</div>
             <input placeholder="Player name" ng-model="settings.name" type="text" ng-change="updatePlayerName()" />    
@@ -31,12 +32,13 @@
             <input type="button" ng-click="updateHost()" value="Update" />   
         </div>
 
-    <div>
+    </div>
+    
+    <div popup-message message="{{game.message}}" class="game-message"></div>
 
     <script type="text/javascript" src="cordova.js"></script>
 	<script src="bower_components/angular/angular.js"></script>
 	<script src="bower_components/ngCordova/dist/ng-cordova.js"></script>
 	<script src="app.js"></script>
-    <script></script>
 </body>
 </html>

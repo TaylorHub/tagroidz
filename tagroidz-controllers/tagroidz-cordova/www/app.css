@@ -20,50 +20,50 @@ body{
 
 .arrow-top {
     position: absolute;
-    top: 6px;
+    top: 8px;
     left:50%;
-    margin-left:-60px;
+    margin-left:-15vh;
     width:0px; 
     height:0px; 
-    border-left:60px solid transparent;
-    border-right:60px solid transparent;            
-    border-bottom:60px solid #FFBB33;
+    border-left:15vh solid transparent;
+    border-right:15vh solid transparent;            
+    border-bottom:15vh solid #FFBB33;
 }
 
 .arrow-bottom {
     position: absolute;
     width:0px; 
     height:0px; 
-    border-left:60px solid transparent;
-    border-right:60px solid transparent;            
-    border-top:60px solid #FFBB33;
-    bottom: 6px;
+    border-left:15vh solid transparent;
+    border-right:15vh solid transparent;            
+    border-top:15vh solid #FFBB33;
+    bottom: 8px;
     left:50%;
-    margin-left:-60px;
+    margin-left:-15vh;
 }
 
 .arrow-right {
     position: absolute;
     top:50%;
-    margin-top: -60px;
-    right:6px;
+    margin-top: -15vh;
+    right:8px;
     width:0px; 
     height:0px; 
-    border-top:60px solid transparent;
-    border-bottom:60px solid transparent;            
-    border-left:60px solid #FFBB33;
+    border-top:15vh solid transparent;
+    border-bottom:15vh solid transparent;            
+    border-left:15vh solid #FFBB33;
 }
 
 .arrow-left {
     position: absolute;
     top:50%;
-    margin-top: -60px;
-    left:6px;
+    margin-top: -15vh;
+    left:8px;
     width:0px; 
     height:0px; 
-    border-top:60px solid transparent;
-    border-bottom:60px solid transparent;            
-    border-right:60px solid #FFBB33; 
+    border-top:15vh solid transparent;
+    border-bottom:15vh solid transparent;            
+    border-right:15vh solid #FFBB33; 
 }
 
 .button{
@@ -117,10 +117,15 @@ body{
     background: rgba(255,255,255,0.5);
     padding: 8px;
     overflow: auto;    
+    opacity:0;
+}
+.settings.opened{
+    opacity:1;
 }
 .settings::-webkit-scrollbar {
  display: none;
 }
+
 .settings .scroll{
     padding-bottom: 100%;
 }
@@ -160,4 +165,16 @@ body{
     padding: 8px;
     overflow: auto;
     transition:all linear 2s;
+}
+
+.game-message{
+position: absolute;
+left: 0;
+text-align: center;
+width: 100%;
+top: 40vh;
+height: 20vh;
+font-size: 30vh;
+color: orange;
+line-height: 24vh;
 }
