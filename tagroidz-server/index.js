@@ -5,11 +5,11 @@ var uuid = require('node-uuid');
 
 
 app.get('/monitor-app/*', function(req, res){
-  res.sendfile(__dirname + req.url);
+  res.sendFile(__dirname + req.url);
 });
 
 app.get('/controller-cordova/*', function(req, res){
-  res.sendfile(__dirname + req.url);
+  res.sendFile(__dirname + req.url);
 });
 
 app.rooms = [];
@@ -271,8 +271,11 @@ controllers.on('connection', function(socket){
   
 });
 
-http.listen(process.env.PORT, function(){
-  console.log('listening on '+ process.env.IP + ':' + process.env.PORT);
+var port = process.env.PORT || 3000;
+var ip = process.env.IP || 'localhost';
+
+http.listen(port, function(){
+  console.log('listening on '+ ip + ':' + port);
 });
 
 var main = function(){
