@@ -4,7 +4,7 @@ var io = require('socket.io')(http);
 var uuid = require('node-uuid');
 
 
-app.get('/monitor/*', function(req, res){
+app.get('/monitor-app/*', function(req, res){
   res.sendfile(__dirname + req.url);
 });
 
@@ -271,8 +271,8 @@ controllers.on('connection', function(socket){
   
 });
 
-http.listen(3000, function(){
-  console.log('listening on *:3000');
+http.listen(process.env.PORT, function(){
+  console.log('listening on '+ process.env.IP + ':' + process.env.PORT);
 });
 
 var main = function(){
