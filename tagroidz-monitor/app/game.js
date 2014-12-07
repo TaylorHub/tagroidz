@@ -46,7 +46,7 @@ var loadAssets = function(){
 };
 
 var audio = new Audio();
-audio.src='song.mp3';
+audio.src='music/song.mp3';
 audio.play();
 audio.volume=0;
 audio.onended = function(){
@@ -55,7 +55,7 @@ audio.onended = function(){
 };
 
 var tagSound = new Audio();
-tagSound.src='9338.mp3';
+tagSound.src='music/9338.mp3';
 function makeTagSound(){
 	tagSound.currentTime=0;
 	tagSound.play();
