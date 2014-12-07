@@ -1,8 +1,7 @@
 Tagroidz Monitor
 ================
 
-This module contains the game logic, it relies on nodejs and socket.io.
-
+This module contains the Html5 application which renders the game in a browser.
 
 ## Installation
 
@@ -15,3 +14,7 @@ Run in a terminal :
 In the same terminal :
 
 	node server.js
+
+Then open in your browser 
+
+	http://localhost:3001/#http://localhost:3000

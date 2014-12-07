@@ -15,3 +15,9 @@ In the same terminal :
 
 	node index.js
 
+Your websocket server is running on port 3000. 
+
+Two endpoints :
+
+	http://localhost:3000/monitor
+	http://localhost:3000/controller
