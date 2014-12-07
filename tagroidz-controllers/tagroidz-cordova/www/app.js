@@ -5,8 +5,8 @@ angular.module('tagroidz',['ngCordova'])
 	$scope.settings = {
 		name:localStorage.name || 'Unnamed player',
 		host:localStorage.host,
-		mobile:false,
-		shown:false
+		shown:false,
+		monitor:true
 	};
 
 	$scope.dir = {
@@ -21,26 +21,24 @@ angular.module('tagroidz',['ngCordova'])
 	};
 
 	var socket =  io.connect($scope.settings.host + '/controller');
+
+	addEventListener('keydown',function(e){
+		$scope.dir.left = e.keyCode == 37;
+		$scope.dir.top = e.keyCode == 38;
+		$scope.dir.right = e.keyCode == 39;
+		$scope.dir.bottom = e.keyCode == 40;
+		socket.emit('state',angular.toJson($scope.dir));
+	});
+
+	addEventListener('keyup',function(e){
+		$scope.dir.left = !e.keyCode == 37;
+		$scope.dir.top = !e.keyCode == 38;
+		$scope.dir.right = !e.keyCode == 39;
+		$scope.dir.bottom = !e.keyCode == 40;
+		socket.emit('state',angular.toJson($scope.dir));
+	});
 	
-	if(!$scope.settings.mobile){
-		
-		addEventListener('keydown',function(e){
-			$scope.dir.left = e.keyCode == 37;
-			$scope.dir.top = e.keyCode == 38;
-			$scope.dir.right = e.keyCode == 39;
-			$scope.dir.bottom = e.keyCode == 40;
-			socket.emit('state',angular.toJson($scope.dir));
-		});
-	
-		addEventListener('keyup',function(e){
-			$scope.dir.left = !e.keyCode == 37;
-			$scope.dir.top = !e.keyCode == 38;
-			$scope.dir.right = !e.keyCode == 39;
-			$scope.dir.bottom = !e.keyCode == 40;
-			socket.emit('state',angular.toJson($scope.dir));
-		});
-		
-	}
+
 	  
 
 	$scope.updatePlayerName = function(){

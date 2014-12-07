@@ -14,13 +14,15 @@
 </head>
 <body ng-controller="Maincontroller">
 
+    <iframe ng-if="settings.monitor" src="../monitor-app/" class="background"></iframe>
+
     <span class="arrow arrow-top" ng-class="{active:dir.top}"></span>
     <span class="arrow arrow-bottom" ng-class="{active:dir.bottom}"></span>
     <span class="arrow arrow-left" ng-class="{active:dir.left}"></span>
     <span class="arrow arrow-right" ng-class="{active:dir.right}"></span>
 
-    <div class="button button-a" ng-click="onButton('A')">A</div>
-    <div class="button button-b" ng-click="onButton('B')">B</div>
+    <div class="button button-a" ng-class="{light:settings.monitor}" ng-click="onButton('A')">A</div>
+    <div class="button button-b" ng-class="{light:settings.monitor}" ng-click="onButton('B')">B</div>
 
     <div ng-click="settings.shown = true;" class="open-settings">Settings</div>
 
@@ -29,7 +31,8 @@
             <div ng-click="settings.shown = false;" class="close">Close</div>
             <input placeholder="Player name" ng-model="settings.name" type="text" ng-change="updatePlayerName()" />    
             <input placeholder="Host" ng-model="settings.host" type="text"/>   
-            <input type="button" ng-click="updateHost()" value="Update" />   
+            <input type="button" ng-click="updateHost()" value="Update" />  
+            <label for="monitor"><input id="monitor" type="checkbox"ng-model="settings.monitor" /><span>Monitor</span></label>
         </div>
 
     </div>
