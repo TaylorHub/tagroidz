@@ -133,7 +133,7 @@ app.createRoom = function(name) {
 				case  'B' : 
 
 					if(player.reserve > 0){
-						player.speed += player.reserve;
+						player.speed += player.reserve*1.5;
 						player.reserve = Math.max(player.reserve - 2, 0);
 					}
 
