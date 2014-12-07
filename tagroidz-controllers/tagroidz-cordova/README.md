@@ -10,4 +10,6 @@ Open a terminal and run
 	bower install
 	cordova run android
 
-Open the settings and set the correct URI of the websocket server (http://your-tagroidz-server:port)
+# Configure the game once the application is started
+
+Open the settings from the upper left corner of the app, then set the correct URI of the tagroidz websocket server (http://your-tagroidz-server:port)
