@@ -3,16 +3,13 @@ var http = require('http').Server(app);
 var io = require('socket.io')(http);
 var uuid = require('node-uuid');
 
-app.get('/chattest', function(req, res){
-  res.sendFile(__dirname + '/index.html');
+
+app.get('/monitor/*', function(req, res){
+  res.sendfile(__dirname + req.url);
 });
 
-app.get('/monitor', function(req, res){
-  res.sendFile(__dirname + '/../tagroidz-monitor/index.html');
-});
-
-app.get('/controller', function(req, res){
-  res.sendFile(__dirname + '/controller/index.html');
+app.get('/controller-cordova/*', function(req, res){
+  res.sendfile(__dirname + req.url);
 });
 
 app.rooms = [];
