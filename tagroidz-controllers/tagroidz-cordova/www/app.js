@@ -1,12 +1,10 @@
 angular.module('tagroidz',['ngCordova'])
-.controller('Maincontroller',function($scope, $cordovaDeviceMotion,$cordovaVibration, $interval,$timeout){
 
-	$scope.state = 'Hey move your phone';
-	$scope.deviceOrientation = {};
-	$scope.acceleration = {};
+.controller('Maincontroller',function($scope, $cordovaDeviceMotion,$cordovaVibration, $interval,$timeout){
+	
 	$scope.settings = {
 		name:localStorage.name || 'Unnamed player',
-		host:localStorage.host || 'http://localhost:3000',
+		host:localStorage.host || '',
 		shown:false
 	};
 
@@ -46,9 +44,9 @@ angular.module('tagroidz',['ngCordova'])
 
 	$scope.updateHost = function(){
 		localStorage.host = $scope.settings.host;
-		setTimeout(function(){
+		$timeout(function(){
 			location.reload();
-		},100);		
+		},100);
 	};
 
 	$scope.onButton = function(name){
@@ -62,18 +60,16 @@ angular.module('tagroidz',['ngCordova'])
 
 	socket.on('tag',function(){
 		$scope.game.message = 'PAF !';
-		$cordovaVibration.vibrate([150,50,150,30,150,20,150]);
+		$cordovaVibration.vibrate([25,50,25,50,25,50,25]);
 	});
 
     document.addEventListener('deviceready', function(){
-
 
     	var options = { frequency: 100 };
 		var Epsilon = 2;
 		var xDelta = 4;
 
 	    $cordovaDeviceMotion.watchAcceleration(options).promise.then(
-
 	      function() {/* unused */},  
 	      function(err) {},
 	      function(acceleration) {
@@ -85,17 +81,7 @@ angular.module('tagroidz',['ngCordova'])
 	      	$scope.dir.left = acceleration.y < -Epsilon;
 	      	$scope.dir.right = acceleration.y > Epsilon;	      	
 
-			socket.emit('state',angular.toJson($scope.dir));
-
-			if($scope.dir.top 
-				|| $scope.dir.bottom
-				|| $scope.dir.left
-				|| $scope.dir.right
-				){
-				// lol 	
-				// $cordovaVibration.vibrate(95);
-			}
-
+			socket.emit('state',angular.toJson($scope.dir));			
 	    });
 
     }, false);

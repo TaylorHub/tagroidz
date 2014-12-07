@@ -13,7 +13,7 @@ body{
 .arrow{
     opacity: 0.2;            
 }
-
+.arrow:active,
 .arrow.active{
     opacity: 1;
 }
@@ -100,7 +100,12 @@ body{
 .button:active{
     background: #0B5157;
     border: 2px solid #fff;
+}
 
+
+.open-settings {
+    color: white;
+    font-size: 8vh;
 }
 
 .settings{
@@ -113,15 +118,19 @@ body{
     padding: 8px;
     overflow: auto;    
 }
-
+.settings::-webkit-scrollbar {
+ display: none;
+}
 .settings .scroll{
     padding-bottom: 100%;
 }
 
 .settings .close{
     position: fixed;
-    top: 6px;
-    right:6px;
+    top: 8px;
+    right:8px;
+    color: white;
+    font-size: 8vh;
 }
 
 .settings input {

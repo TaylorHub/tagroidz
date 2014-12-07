@@ -61,7 +61,7 @@ function makeTagSound(){
 	tagSound.play();
 }
 
-var players = {};
+var players = [];
 
 var socket = io(location.hash.replace('#','')+'/monitor');
 

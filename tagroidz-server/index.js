@@ -63,13 +63,13 @@ app.createRoom = function(name) {
 
 		setRandomPos:function(player){
 
-			player.pos.x = this.map.blockSize + parseInt(
-				Math.random()*(this.map.width - this.map.blockSize*2)
-				,10);
+			var map = this.map;
 
-			player.pos.y = this.map.blockSize + parseInt(
-				Math.random()*(this.map.height - this.map.blockSize *2)
-				,10);
+			var x = parseInt(Math.random()*(map.width));
+			var y = parseInt(Math.random()*(map.height));
+
+			player.pos.x = Math.max(Math.min(x,map.width-map.blockSize*2),map.blockSize);
+			player.pos.y = Math.max(Math.min(y,map.height-map.blockSize*2),map.blockSize);
 
 		},
 
