@@ -2,7 +2,7 @@
 
 ## Android
 
-Provides an android player controller an android devices, from sdk xxx
+Provides a player controller for android devices. This module relies on cordova and ngCordova.
 
 ## Others ?
  

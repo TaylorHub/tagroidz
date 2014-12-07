@@ -1,7 +1,8 @@
-Tagroidz Server
-===============
+Tagroidz Monitor
+================
 
 This module contains the game logic, it relies on nodejs and socket.io.
+
 
 ## Installation
 
@@ -13,5 +14,4 @@ Run in a terminal :
 
 In the same terminal :
 
-	node index.js
-
+	node server.js
