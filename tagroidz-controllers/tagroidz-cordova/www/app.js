@@ -7,6 +7,12 @@ angular.module('tagroidz',['ngCordova'])
 		host:localStorage.host || '',
 		shown:false
 	};
+	
+	$scope.orientation = {
+		msg: '',
+		shown: false,
+		shownStartButton: false
+	};
 
 	$scope.dir = {
 		left:false,
@@ -62,13 +68,15 @@ angular.module('tagroidz',['ngCordova'])
 		$scope.game.message = 'PAF !';
 		$cordovaVibration.vibrate([25,50,25,50,25,50,25]);
 	});
+	
+	
 
     document.addEventListener('deviceready', function(){
-
-    	var options = { frequency: 100 };
+		
+		var options = { frequency: 100 };
 		var Epsilon = 2;
 		var xDelta = 4;
-
+		
 	    $cordovaDeviceMotion.watchAcceleration(options).promise.then(
 	      function() {/* unused */},  
 	      function(err) {},
@@ -85,5 +93,57 @@ angular.module('tagroidz',['ngCordova'])
 	    });
 
     }, false);
+    
+    
+    
+    if (window.DeviceOrientationEvent) {
+    	
+    	//Assure that user hold is phone in landscape-primary and that he lock screen rotation
+    	if(window.orientation !== undefined){
+	    	var reorient = function() {
+				if (window.orientation === 90) {
+					$scope.orientation.msg = 'Perfect ! Now lock screen rotation from your phone settings then click OK';
+				  	$scope.orientation.shownStartButton = true;
+				} else {
+					$scope.orientation.msg = 'Please turn your phone in landscape orientation';
+					$scope.orientation.shownStartButton = false;
+				  	$scope.orientation.shown = true;
+				}
+				$scope.$apply();
+			};
+			
+			window.addEventListener('orientationchange', function(){
+				reorient();
+			});
+			reorient();
+    	}
+    	
+    	var options = { frequency: 100 };
+		var Epsilon = 4;
+		var xDelta = -20;
+		
+		window.addEventListener('deviceorientation', function (eventData) {
+			
+	      	$scope.dir.bottom = eventData.gamma < -Epsilon + xDelta;
+	      	$scope.dir.top = eventData.gamma > Epsilon + xDelta;
+
+	      	$scope.dir.left = eventData.beta < -Epsilon;
+	      	$scope.dir.right = eventData.beta > Epsilon;
+	      	
+	      	$scope.$apply();
+
+			socket.emit('state', angular.toJson($scope.dir));
+		});
+	}
+	
+	
+    
+   /* var lockOrientation = screen.lockOrientation || screen.mozLockOrientation || screen.msLockOrientation;
+	if (lockOrientation && lockOrientation("landscape-primary")) {
+	} else {
+	 	alert('Please lock your screen orientation from your phone settings');
+	}*/
+	
+	
 
 });

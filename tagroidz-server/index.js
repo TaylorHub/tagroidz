@@ -4,11 +4,11 @@ var io = require('socket.io')(http);
 var uuid = require('node-uuid');
 
 
-app.get('/monitor-app/*', function(req, res){
+app.get('/monitor/*', function(req, res){
   res.sendFile(__dirname + req.url);
 });
 
-app.get('/controller-cordova/*', function(req, res){
+app.get('/controller/*', function(req, res){
   res.sendFile(__dirname + req.url);
 });
 
