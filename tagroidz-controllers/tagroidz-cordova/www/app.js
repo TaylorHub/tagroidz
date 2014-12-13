@@ -6,7 +6,7 @@ angular.module('tagroidz',['ngCordova'])
 		name:localStorage.name || 'Unnamed player',
 		host:localStorage.host,
 		shown:false,
-		monitor:true
+		monitor:localStorage.monitor === 'true'
 	};
 
 	$scope.dir = {
@@ -22,28 +22,13 @@ angular.module('tagroidz',['ngCordova'])
 
 	var socket =  io.connect($scope.settings.host + '/controller');
 
-	addEventListener('keydown',function(e){
-		$scope.dir.left = e.keyCode == 37;
-		$scope.dir.top = e.keyCode == 38;
-		$scope.dir.right = e.keyCode == 39;
-		$scope.dir.bottom = e.keyCode == 40;
-		socket.emit('state',angular.toJson($scope.dir));
-	});
-
-	addEventListener('keyup',function(e){
-		$scope.dir.left = !e.keyCode == 37;
-		$scope.dir.top = !e.keyCode == 38;
-		$scope.dir.right = !e.keyCode == 39;
-		$scope.dir.bottom = !e.keyCode == 40;
-		socket.emit('state',angular.toJson($scope.dir));
-	});
-	
-
-	  
-
 	$scope.updatePlayerName = function(){
 		localStorage.name = $scope.settings.name;
 		socket.emit('rename',$scope.settings.name);
+	};
+
+	$scope.updateMonitor = function(){
+		localStorage.monitor = $scope.settings.monitor;
 	};
 
 	$scope.updateHost = function(){
@@ -105,8 +90,9 @@ angular.module('tagroidz',['ngCordova'])
 
 		attrs.$observe('message', function(val) {
 			if(!val){
-				return
+				return;
 			}
+
 			element.removeClass('bounceOutUp');
 			element.html(val).addClass('zoomIn');
 			$timeout(function(){

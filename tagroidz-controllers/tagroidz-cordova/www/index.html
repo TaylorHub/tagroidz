@@ -32,7 +32,7 @@
             <input placeholder="Player name" ng-model="settings.name" type="text" ng-change="updatePlayerName()" />    
             <input placeholder="Host" ng-model="settings.host" type="text"/>   
             <input type="button" ng-click="updateHost()" value="Update" />  
-            <label for="monitor"><input id="monitor" type="checkbox"ng-model="settings.monitor" /><span>Monitor</span></label>
+            <label for="monitor"><input id="monitor" type="checkbox" ng-model="settings.monitor" ng-change="updateMonitor()"/><span>Monitor</span></label>
         </div>
 
     </div>
