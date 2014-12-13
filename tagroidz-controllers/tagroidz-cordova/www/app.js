@@ -60,6 +60,7 @@ angular.module('tagroidz',['ngCordova'])
 		$cordovaVibration.vibrate([25,50,25,50,25,50,25]);
 	});
 
+
     document.addEventListener('deviceready', function(){
 
     	var options = { frequency: 100 };
@@ -82,6 +83,7 @@ angular.module('tagroidz',['ngCordova'])
 	    });
 
     }, false);
+    
 
 })
 .directive('popupMessage',function($timeout){

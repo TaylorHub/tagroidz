@@ -208,7 +208,7 @@ body{
     left: 0;
     text-align: center;
     width: 100%;
-    height:0;
+    height:0!important;
     top: 40vh;
     height: 20vh;
     font-size: 30vh;
