@@ -4,7 +4,11 @@ var io = require('socket.io')(http);
 var uuid = require('node-uuid');
 
 
-app.get('/monitor-app/*', function(req, res){
+app.get('/2d-monitor*', function(req, res){
+  res.sendFile(__dirname + req.url);
+});
+
+app.get('/3d-monitor*', function(req, res){
   res.sendFile(__dirname + req.url);
 });
 
