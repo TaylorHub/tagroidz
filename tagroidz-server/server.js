@@ -266,8 +266,10 @@ controllers.on('connection', function(socket){
 			tagged.isTag = false;
 			tagged.isInvicible = 100;
 
-			io.of('/controller').emit('tag');
-			io.of('/monitor').emit('tag');
+			var tagData = {other:tagged,tagged:other};
+
+			io.of('/controller').emit('tag',tagData);
+			io.of('/monitor').emit('tag',tagData);
 					
 		}
 

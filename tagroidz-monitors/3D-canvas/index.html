@@ -2,13 +2,86 @@
 	<head>
 		<title>3D monitor</title>
 		<style>
-			body { margin: 0; }
 			canvas { width: 100%; height: 100% }
+			body {
+				background-color: #fff;
+				color: #111;
+				margin: 0px;
+				overflow: hidden;
+				font-family: Monospace;
+				font-size: 13px;
+			}
+
+			#info {
+				position: absolute;
+				top: 0px; width: 100%;
+				padding: 5px;
+				text-align: center;
+			}
+
+			a {
+				color: #0080ff;
+				text-decoration: none;
+			}
+
+			a:hover {
+				color: #f00;
+			}
+
+			#footer { width: 100%; margin: 2em auto; text-align: center; position: absolute; bottom: 0 }
+			strong { color: red }
+
+			#stats { position: absolute; top:0; left: 0 }
+			#stats #fps { background: transparent !important }
+			#stats #fps #fpsText { color: #555 !important }
+			#stats #fps #fpsGraph { display: none }
 		</style>
 	</head>
 	<body>
+	<div id="container"></div>
+		<div id="info">
+			TAGROIDZ
+		</div>
+		<div id="footer">
+			press <strong>h</strong> to toggle hemisphere light, <strong>d</strong> to toggle directional light
+		</div>
+
+		<script type="x-shader/x-vertex" id="vertexShader">
+
+			varying vec3 vWorldPosition;
+
+			void main() {
+
+				vec4 worldPosition = modelMatrix * vec4( position, 1.0 );
+				vWorldPosition = worldPosition.xyz;
+
+				gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
+
+			}
+
+		</script>
+
+		<script type="x-shader/x-fragment" id="fragmentShader">
+
+			uniform vec3 topColor;
+			uniform vec3 bottomColor;
+			uniform float offset;
+			uniform float exponent;
+
+			varying vec3 vWorldPosition;
+
+			void main() {
+
+				float h = normalize( vWorldPosition + offset ).y;
+				gl_FragColor = vec4( mix( bottomColor, topColor, max( pow( max( h , 0.0), exponent ), 0.0 ) ), 1.0 );
+
+			}
+
+		</script>
+
 		<script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
 		<script src="lib/three.min.js"></script>
+		<script src="lib/stats.min.js"></script>
 		<script src="lib/underscore-min.js"></script>
 		<script src="game.js"></script>
 	</body>
