@@ -85,6 +85,7 @@ function movePlayers(){
 		}
 		mesh.position.x = player.pos.x;
 		mesh.position.z = player.pos.y;
+		mesh.position.y = 16
 	});
 }
 
