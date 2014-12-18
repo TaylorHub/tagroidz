@@ -42,6 +42,22 @@ angular.module('tagroidz',['ngCordova'])
 		socket.emit('button', name);
 	};
 
+	addEventListener('keydown',function(e){
+		$scope.dir.left = e.keyCode == 37;
+		$scope.dir.top = e.keyCode == 38;
+		$scope.dir.right = e.keyCode == 39;
+		$scope.dir.bottom = e.keyCode == 40;
+		socket.emit('state',angular.toJson($scope.dir));
+	});
+
+	addEventListener('keyup',function(e){
+		$scope.dir.left = !e.keyCode == 37;
+		$scope.dir.top = !e.keyCode == 38;
+		$scope.dir.right = !e.keyCode == 39;
+		$scope.dir.bottom = !e.keyCode == 40;
+		socket.emit('state',angular.toJson($scope.dir));
+	});
+
 	socket.on('connect',function(){
 		
 		$scope.$apply(function(){
