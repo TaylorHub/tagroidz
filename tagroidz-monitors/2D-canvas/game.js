@@ -91,7 +91,7 @@ var render = function () {
 	players.forEach(function(player){
 
 		if(player.dig){
-			ctx.drawImage(vortexImage, player.pos.x, player.pos.y);
+			ctx.drawImage(vortexImage, player.pos.x-35, player.pos.y-35);
 		}
 
 		if(player.isTag){

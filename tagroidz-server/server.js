@@ -42,6 +42,7 @@ app.createMap = function() {
 app.createPlayer = function(id, name) {
 	var player = {
 		id: id || 'player',
+		state:{left:false,top:false,bottom:false,right:false},
 		name: name || 'player',
 		isInvicible: 200,
 		isTag: false,
@@ -233,8 +234,24 @@ controllers.on('connection', function(socket){
 	});
 
 	socket.on('state', function(state){
-
 		state = JSON.parse(state);
+		player.state = state;		
+	});
+  
+});
+
+var port = process.env.PORT || 3000;
+var ip = process.env.IP || 'localhost';
+
+http.listen(port, function(){
+  console.log('listening on '+ ip + ':' + port);
+});
+
+var main = function(){
+
+	testRoom.players.forEach(function(player){
+
+		var state = player.state;
 
 		if(state.top){
 			testRoom.moveUp(player);
@@ -272,21 +289,6 @@ controllers.on('connection', function(socket){
 			io.of('/monitor').emit('tag',tagData);
 					
 		}
-
-	});
-  
-});
-
-var port = process.env.PORT || 3000;
-var ip = process.env.IP || 'localhost';
-
-http.listen(port, function(){
-  console.log('listening on '+ ip + ':' + port);
-});
-
-var main = function(){
-
-	testRoom.players.forEach(function(player){
 
 		if(player.reserve<5){
 			player.reserve+=0.025;
