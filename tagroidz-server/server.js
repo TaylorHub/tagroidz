@@ -50,6 +50,7 @@ app.createPlayer = function(id, name) {
 		reserve:0,
 		dig: false,
 		speed:5,
+		isBot:false,
 		pos: {
 			x:0,
 			y:0
@@ -65,6 +66,7 @@ app.createRoom = function(name) {
 		name: name,
 		map: app.createMap(),
 		players: [],
+		tag:null,
 
 		setRandomPos:function(player){
 
@@ -82,6 +84,7 @@ app.createRoom = function(name) {
 
 			if(!testRoom.players.length){
 				player.isTag = true;
+				this.tag = player;
 			}
 
 			this.setRandomPos(player);
@@ -112,8 +115,7 @@ app.createRoom = function(name) {
 					 && (Math.abs(player.pos.x-other.pos.x)<map.blockSize/2 
 					 	&& Math.abs(player.pos.y-other.pos.y)<map.blockSize/2)){
 					console.log('COLLISION');
-					collider = other;
-
+					collider = other;						
 				}
 
 			});
@@ -188,6 +190,42 @@ app.createRoom = function(name) {
 
 		renamePlayer:function(player,name){
 			player.name = name;
+		},
+
+		getNearestPlayer:function(player){
+
+			if(this.players.length > 1){
+
+				var nearest = null;
+				var _this = this;
+				this.players.forEach(function(other){
+					if(player != other && !other.isInvicible){
+						if(!nearest ){
+							nearest = other;
+						}
+						else{
+							var playerToNearest = _this.getDistance(player,nearest);
+							var playerToOther = _this.getDistance(player,other);
+							if(playerToOther < playerToNearest){
+								nearest = other;
+							}
+						}
+					}
+				});
+
+				return nearest;
+				
+			}
+			else{
+				return null;
+			}
+
+		},
+
+		getDistance:function(p1,p2){
+			var x = p1.pos.x - p2.pos.x;
+			var y = p1.pos.y - p2.pos.y;
+			return x*x + y*y;
 		}
 	};
 
@@ -221,6 +259,9 @@ controllers.on('connection', function(socket){
 
 		if(player.isTag && testRoom.players.length){
 			testRoom.players[0].isTag = true;
+			this.tag = testRoom.players[0];
+		}else if(!testRoom.players.length){
+			this.tag = null;
 		}
 
 	});
@@ -239,6 +280,47 @@ controllers.on('connection', function(socket){
 	});
   
 });
+
+function createBot(name){
+	
+	var bot= app.createPlayer(uuid.v4(), 'Bot1');
+	bot.isBot = true;
+	testRoom.addPlayer(bot);
+
+	function animateBot(){
+		if(bot.isTag){
+			// Flowow the nearest player
+			var nearestPlayer = testRoom.getNearestPlayer(bot);
+			if(nearestPlayer){
+				bot.state.top = bot.pos.y > nearestPlayer.pos.y;
+				bot.state.bottom = bot.pos.y < nearestPlayer.pos.y;
+				bot.state.right = bot.pos.x < nearestPlayer.pos.x;
+				bot.state.left = bot.pos.x > nearestPlayer.pos.x;
+			}else{
+				console.log('not found')
+			}
+
+		}else if(testRoom.tag){
+
+			bot.state.top = testRoom.tag.pos.y > bot.pos.y || Math.random() > 0.5;
+			bot.state.bottom = testRoom.tag.pos.y < bot.pos.y || Math.random() > 0.5;
+			bot.state.left = testRoom.tag.pos.x > bot.pos.x || Math.random() > 0.5;
+			bot.state.right =testRoom.tag.pos.x < bot.pos.x || Math.random() > 0.5;
+
+		}else{
+			bot.state.top = Math.random() > 0.5 ;
+			bot.state.bottom = Math.random() > 0.5 ;
+			bot.state.left = Math.random() > 0.5 ;
+			bot.state.right = Math.random() > 0.5 ;
+		}
+		setTimeout(animateBot,bot.isTag ? 500 : Math.random() * 500 + 500 );
+	}
+
+	animateBot();
+
+}
+
+['Rob Oto','Booker','Brainstorm','Roberto'].forEach(createBot);
 
 var port = process.env.PORT || 3000;
 var ip = process.env.IP || 'localhost';
@@ -278,7 +360,7 @@ var main = function(){
 		}
 
 		if(tagged && other && !other.isInvicible) {
-
+			testRoom.tag = other;
 			other.isTag = true;
 			tagged.isTag = false;
 			tagged.isInvicible = 100;
